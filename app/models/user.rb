@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :organization_members
   has_many :organizations, through: :organization_members
 
   devise :database_authenticatable,

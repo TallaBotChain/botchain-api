@@ -2,6 +2,12 @@
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
 
-u = User.new(email: 'botchain@talla.com', nickname: 'Bot', name: 'Bot Chain', password: "botchain")
-u.skip_confirmation!
-u.save!
+user = User.new(email: 'botchain@talla.com', nickname: 'Bot', name: 'Bot Chain', password: "botchain")
+user.skip_confirmation!
+user.save!
+
+org = Organization.create!(name: "Hollywood", description: "Bots galore!")
+org.bots.create!(name: "Bender", description: "beep boop")
+org.bots.create!(name: "Robby", description: "beep boop")
+
+OrganizationMember.create!(organization: org, user: user)
