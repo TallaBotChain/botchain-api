@@ -2,7 +2,11 @@ module V1
   class OrganizationsController < ApplicationController
     def show
       @organization = Organization.find_by(hashed_identifier: params[:hashed_identifier])
-      render json: @organization
+      if @organization.present?
+        render json: @organization
+      else
+        render status: 404, json: { message: "Hashed identifier not found" }
+      end
     end
 
     def update
