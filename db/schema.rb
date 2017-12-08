@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20171207023331) do
     t.boolean "approved", default: false
     t.text "tags", default: [], array: true
     t.string "current_version"
+    t.text "eth_address"
     t.index ["organization_id"], name: "index_bots_on_organization_id"
   end
 
@@ -52,6 +53,8 @@ ActiveRecord::Schema.define(version: 20171207023331) do
     t.string "email"
     t.string "url"
     t.boolean "approved", default: false
+    t.text "eth_address"
+    t.text "hashed_identifier"
   end
 
   create_table "users", force: :cascade do |t|

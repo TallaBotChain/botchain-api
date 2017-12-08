@@ -11,5 +11,7 @@ class AddAttributesToOrganizations < ActiveRecord::Migration[5.1]
     add_column :organizations, :email, :string
     add_column :organizations, :url, :string
     add_column :organizations, :approved, :boolean, default: false
+    add_column :organizations, :eth_address, :text
+    add_column :organizations, :hashed_identifier, :text
   end
 end
