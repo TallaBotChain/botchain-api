@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Pre-requisites
 
-Things you may want to cover:
+[Install docker](https://store.docker.com/editions/community/docker-ce-desktop-mac)
 
-* Ruby version
+## Running application
 
-* System dependencies
+### Everything
 
-* Configuration
+```
+docker-compose build
+docker-compose up
+```
 
-* Database creation
+### Piecemeal
+```
+# start only postgres in background
+docker-compose up -d postgres
+# start only app server
+docker-compose up app
+# run tests
+docker-compose run test test
+# run console within container
+docker-compose run app console
+# run bash within container
+docker-compose run app bash
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```

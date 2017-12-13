@@ -61,6 +61,11 @@ function start_app {
 }
 export -f start_app
 
+function start_console {
+  exec bundle exec rails console -e $APP_ENV
+}
+export -f start_app
+
 function start_worker {
   echo "Starting worker"
   exec bundle exec rake worker
@@ -83,6 +88,13 @@ case $action in
     app_init
     db_init
     start_worker
+  ;;
+
+  console)
+    wait_for_services
+    app_init
+    db_init
+    start_console
   ;;
 
   db_init)
