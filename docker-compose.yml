@@ -1,0 +1,48 @@
+# For bringing up a development runtime with docker
+# docker-compose build
+# docker-compose up # for everything
+# docker-compose up -d postgres # start only postgres in background
+# docker-compose up app # start only app server
+# docker-compose run test test # run tests
+
+version: '3'
+
+services:
+
+  base: &base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: exec /bin/true
+    environment:
+      APP_ENV: 'development'
+      APP_PORT: '3000'
+      DB_HOST: 'postgres'
+      DB_PORT: '5432'
+      DB_USER: 'postgres'
+      DB_PASS: ''
+      DB_NAME: 'bothain-api_development'
+      SERVICES: 'DB_HOST:DB_PORT'
+    volumes:
+      - bundle_cache:/srv/bundler
+      - .:/srv/app
+    links:
+      - postgres
+
+  app:
+    <<: *base
+    command: app
+    ports:
+      - 3000:3000
+
+  test:
+    <<: *base
+    # don't want this to start with a "docker-compose up", but want to be able to
+    # run tests with "docker-compose run test test"
+    command: exec /bin/true
+
+  postgres:
+    image: postgres:9.6
+
+volumes:
+  bundle_cache:
