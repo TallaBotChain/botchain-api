@@ -26,7 +26,7 @@ function wait_for_services {
 
 function app_init {
   # Run bundler if needed - useful in dev
-  if [[ "$APP_ENV" == "dev" && -z $NO_BUNDLE ]]; then
+  if [[ "$APP_ENV" == "development" ]]; then
     bundle check || bundle install
   fi
 }
@@ -39,7 +39,7 @@ function db_init {
 export -f db_init
 
 function db_reset {
-  echo "Restting db"
+  echo "Resetting db"
   bundle exec rake db:reset
 }
 export -f db_init
@@ -57,7 +57,8 @@ function db_seed {
 export -f db_seed
 
 function start_app {
-  exec bundle exec rails server -p $APP_PORT -e $APP_ENV
+  rm -f tmp/pids/*
+  exec bundle exec rails server -b 0.0.0.0 -p $APP_PORT -e $APP_ENV
 }
 export -f start_app
 
