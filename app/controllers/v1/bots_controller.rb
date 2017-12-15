@@ -1,6 +1,11 @@
 module V1
   class BotsController < ApplicationController
     def show
+      @bot = Bot.find_by(hashed_identifier: params[:hashed_identifier])
+      if @bot.present?
+        render json: @bot
+      else
+        render status: 404, json: { message: "Bot not found"}
     end
 
     def update

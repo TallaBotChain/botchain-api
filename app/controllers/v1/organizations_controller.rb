@@ -5,7 +5,7 @@ module V1
       if @organization.present?
         render json: @organization
       else
-        render status: 404, json: { message: "Hashed identifier not found" }
+        render status: 404, json: { message: "Organization not found" }
       end
     end
 
