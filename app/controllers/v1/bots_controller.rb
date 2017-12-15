@@ -4,6 +4,7 @@ module V1
     end
 
     def update
+      #TODO add auth
       @bot = Bot.find_by(hashed_identifier: params[:hashed_identifier])
       if @bot.present?
         @bot.update!(bot_params)
@@ -39,6 +40,9 @@ module V1
                                     success: false,
                                     message: 'Unidentified organization'
                                   }
+    end
+
+    def transfer
     end
 
     private
