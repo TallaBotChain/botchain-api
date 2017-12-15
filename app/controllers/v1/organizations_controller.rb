@@ -21,7 +21,7 @@ module V1
       else
         render status: 404, json: {
                                     success: false,
-                                    message: "Hashed identifier not found."
+                                    message: "Organization not found."
                                   }
       end
     end

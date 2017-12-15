@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20171207023331) do
     t.text "tags", default: [], array: true
     t.string "current_version"
     t.text "eth_address"
+    t.text "hashed_identifier"
     t.index ["organization_id"], name: "index_bots_on_organization_id"
   end
 

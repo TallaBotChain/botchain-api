@@ -4,5 +4,6 @@ class AddAttributesToBot < ActiveRecord::Migration[5.1]
     add_column :bots, :tags, :text, array: true, default: []
     add_column :bots, :current_version, :string
     add_column :bots, :eth_address, :text
+    add_column :bots, :hashed_identifier, :text
   end
 end
