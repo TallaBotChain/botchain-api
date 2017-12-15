@@ -6,6 +6,7 @@ module V1
         render json: @bot
       else
         render status: 404, json: { message: "Bot not found"}
+      end
     end
 
     def update
@@ -48,6 +49,21 @@ module V1
     end
 
     def transfer
+      #TODO auth
+      @to_organization = Organization.find_by(eth_address: params[:to_eth_address])
+      @bot = Bot.find_by(hashed_identifier: params[:hashed_identifier])
+      if @to_organization.present? && @bot.present?
+        @bot.update!(organization: @to_organization)
+        render status: 200, json: {
+                                    success: true,
+                                    hashed_identifier: @bot.hashed_identifier
+                                  }
+      else
+        render status: 404, json: {
+                                    success: false,
+                                    message: 'Bot/Organization not found'
+                                  }
+      end
     end
 
     private
