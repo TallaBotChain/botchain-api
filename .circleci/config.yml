@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/repo
+
+    environment:
+      - SERVICE_NAME: botchain-api
+      - ENV: dev
+      - AWS_ACCOUNT: 500651484941
+      - AWS_REGION: us-east-1
+      - ECS_CLUSTER: main
+      - NAME_PREFIX:
+
+    steps:
+      - checkout
+
+      - run: echo 'export AWS_ENV=$(env | grep "^AWS" | awk -F= '{print "-e " $1}')' >> $BASH_ENV
+      - run: echo 'export MOUNTS="-v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/app"' >> $BASH_ENV
+      - run: echo 'export DOCKER_OPTS="$AWS_ENV $MOUNTS"' >> $BASH_ENV
+
+      # run tests!
+      - run:
+          name: run tests
+          command: |
+            docker-compose run test test
+
+      # deploy
+      - run:
+          name: deploy
+          command: |
+            docker run $DOCKER_OPTS simplygenius/aws-ecs-deploy deploy \
+                -a $AWS_ACCOUNT \
+                -c $NAME_PREFIX$ECS_CLUSTER \
+                -d $ENV-deployer \
+                $NAME_PREFIX$SERVICE_NAME
