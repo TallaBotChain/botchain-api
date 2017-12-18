@@ -10,7 +10,7 @@ jobs:
       - AWS_ACCOUNT: 500651484941
       - AWS_REGION: us-east-1
       - ECS_CLUSTER: main
-      - NAME_PREFIX:
+      - NAME_PREFIX: ""
 
     steps:
       - checkout
