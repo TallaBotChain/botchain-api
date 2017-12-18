@@ -7,7 +7,7 @@ jobs:
     environment:
       - SERVICE_NAME: botchain-api
       - ENV: dev
-      - AWS_ACCOUNT: 500651484941
+      - AWS_ACCOUNT: "500651484941"
       - AWS_REGION: us-east-1
       - ECS_CLUSTER: main
       - NAME_PREFIX: ""
