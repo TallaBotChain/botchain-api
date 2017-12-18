@@ -18,6 +18,8 @@ jobs:
       - run: echo 'export MOUNTS="-v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/app"' >> $BASH_ENV
       - run: echo 'export DOCKER_OPTS="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION $MOUNTS"' >> $BASH_ENV
 
+      - run: env
+
       # run tests!
       - run:
           name: run tests
@@ -28,8 +30,10 @@ jobs:
       - run:
           name: deploy
           command: |
-            docker run $DOCKER_OPTS simplygenius/aws-ecs-deploy deploy \
-                -a $AWS_ACCOUNT \
-                -c $NAME_PREFIX$ECS_CLUSTER \
-                -d $ENV-deployer \
-                $NAME_PREFIX$SERVICE_NAME
+            if [[ $CIRCLE_BRANCH == "master" ]]; then
+              docker run $DOCKER_OPTS simplygenius/aws-ecs-deploy deploy \
+                  -a $AWS_ACCOUNT \
+                  -c $NAME_PREFIX$ECS_CLUSTER \
+                  -d $ENV-deployer \
+                  $NAME_PREFIX$SERVICE_NAME
+            fi
