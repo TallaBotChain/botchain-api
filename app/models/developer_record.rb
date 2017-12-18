@@ -1,6 +1,4 @@
-class Organization < ApplicationRecord
-  has_many :organization_members
-  has_many :users, through: :organization_members
+class DeveloperRecord < ApplicationRecord
   has_many :bots
 
   before_save :save_hashed_identifier
