@@ -15,9 +15,8 @@ jobs:
     steps:
       - checkout
 
-      - run: echo 'export AWS_ENV=$(env | grep "^AWS" | awk -F= '{print "-e " $1}')' >> $BASH_ENV
       - run: echo 'export MOUNTS="-v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/app"' >> $BASH_ENV
-      - run: echo 'export DOCKER_OPTS="$AWS_ENV $MOUNTS"' >> $BASH_ENV
+      - run: echo 'export DOCKER_OPTS="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_REGION $MOUNTS"' >> $BASH_ENV
 
       # run tests!
       - run:
