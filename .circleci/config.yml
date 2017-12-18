@@ -5,18 +5,18 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      - SERVICE_NAME: botchain-api
-      - ENV: dev
+      - SERVICE_NAME: "botchain-api"
+      - ENV: "dev"
       - AWS_ACCOUNT: "500651484941"
-      - AWS_REGION: us-east-1
-      - ECS_CLUSTER: main
+      - AWS_DEFAULT_REGION: "us-east-1"
+      - ECS_CLUSTER: "main"
       - NAME_PREFIX: ""
 
     steps:
       - checkout
 
       - run: echo 'export MOUNTS="-v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/app"' >> $BASH_ENV
-      - run: echo 'export DOCKER_OPTS="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_REGION $MOUNTS"' >> $BASH_ENV
+      - run: echo 'export DOCKER_OPTS="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION $MOUNTS"' >> $BASH_ENV
 
       # run tests!
       - run:
