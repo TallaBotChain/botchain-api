@@ -21,7 +21,6 @@ services:
       DB_PORT: '5432'
       DB_USER: 'postgres'
       DB_PASS: ''
-      DB_NAME: 'bothain-api_development'
       SERVICES: 'DB_HOST:DB_PORT'
     volumes:
       - bundle_cache:/srv/bundler

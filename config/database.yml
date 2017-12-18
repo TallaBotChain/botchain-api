@@ -21,12 +21,12 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database: <%= ENV['DB_NAME'] || "botchain-api_#{Rails.env}" %>
-  # host: <%= ENV['DB_HOST'] || 'localhost' %>
-  # port: <%= ENV['DB_PORT'] || '5432' %>
-  # username: <%= ENV['DB_USER'] || ENV['USER'] || 'postgres' %>
-  # <% if ENV['DB_PASS'] %>
-  # password: <%= ENV['DB_PASS'] %>
-  # <% end %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  port: <%= ENV['DB_PORT'] || '5432' %>
+  username: <%= ENV['DB_USER'] || 'postgres' %>
+  <% if ENV['DB_PASS'] %>
+  password: <%= ENV['DB_PASS'] %>
+  <% end %>
 
 development:
   <<: *default
