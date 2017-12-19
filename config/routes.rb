@@ -5,9 +5,12 @@ Rails.application.routes.draw do
     resource :developer_records, only: [:show, :update] 
 
     resources :bots, only: [:create]
-    resource :bot, only: [:show, :update] do 
+    resource :bots, only: [:show, :update] do 
       put :transfer
       patch :transfer
-    end 
+    end
+
+    resources :developers, only: [:create]
+    resource :developers, only: [:destroy]
   end
 end

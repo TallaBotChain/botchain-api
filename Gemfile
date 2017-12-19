@@ -14,6 +14,8 @@ gem 'pg', '~> 0.18'
 gem 'puma'
 
 gem 'active_model_serializers', '~> 0.10.7'
+gem 'ethereum.rb', github: 'EthWorks/ethereum.rb'
+gem 'eth'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

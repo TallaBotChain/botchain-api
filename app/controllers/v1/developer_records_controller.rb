@@ -28,6 +28,7 @@ module V1
 
     def create
       @developer_record = DeveloperRecord.create!(developer_record_params)
+      @developer_record.developers.create!(eth_address: developer_record_params[:eth_address], owner: true)
       render status: 200, json: {
                                   success: true,
                                   hashed_identifier: @developer_record.hashed_identifier,

@@ -1,5 +1,6 @@
 class DeveloperRecord < ApplicationRecord
   has_many :bots
+  has_many :developers
 
   before_save :save_hashed_identifier
 
