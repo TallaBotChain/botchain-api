@@ -1,7 +1,11 @@
 module V1
   class DeveloperRecordsController < ApplicationController
+
+    before_action :authenticate, except: [:show]
+
     def show
-      @developer_record = DeveloperRecord.find_by(hashed_identifier: params[:hashed_identifier])
+      @developer = Developer.find_by(eth_address:  params[:eth_address])
+      @developer_record = @developer.andand.developer_record
       if @developer_record.present?
         render json: @developer_record
       else
@@ -10,7 +14,8 @@ module V1
     end
 
     def update
-      @developer_record = DeveloperRecord.find_by(hashed_identifier: params[:hashed_identifier])
+      @developer = Developer.find_by(eth_address: @eth_address_access)
+      @developer_record = @developer.andand.developer_record
       if @developer_record.present?
         @developer_record.update!(developer_record_params)
         render status: 200, json: {

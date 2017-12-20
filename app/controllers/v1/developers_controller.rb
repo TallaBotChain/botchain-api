@@ -24,8 +24,19 @@ module V1
     end
 
     def destroy
-      Developer.where(eth_address: developer_params[:eth_address]).destroy_all
-      render status: 200, json: { success: true }
+      @authed_developer = Developer.find_by(eth_address: @eth_address_access)
+      if @authed_developer.owner
+        @developer_to_be_deleted = Developer.find_by(eth_address: developer_params[:eth_address])
+        if @developer_to_be_deleted.developer_record_id == @authed_developer.developer_record_id
+          @developer_to_be_deleted.destroy
+          render status: 200, json: { success: true }
+        else
+          render status: 401, json: { success: false, message: 'Unauthorized' }
+        end
+      else
+        render status: 401, json: { success: false, message: 'Only owners can create developers' }
+      end
+      
     end
 
     private

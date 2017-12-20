@@ -24,6 +24,7 @@ RSpec.describe V1::DeveloperRecordsController, type: :controller do
     end
 
     let(:original_hashed_identifier) { JSON.parse(response.body)["hashed_identifier"]}
+    let(:original_eth_address) { create_params["eth_address"] }
 
     it 'responds with hashed_identifier on create' do
       response_body = JSON.parse(response.body)
@@ -31,8 +32,8 @@ RSpec.describe V1::DeveloperRecordsController, type: :controller do
       expect(response_body["eth_address"]).to eq(create_params[:developer_record][:eth_address])
     end
 
-    it 'responds with developer_record if passed correct hashed_identifier on show' do 
-      get :show, params: { hashed_identifier: original_hashed_identifier }
+    it 'responds with developer_record if passed correct eth_address on show' do 
+      get :show, params: { eth_address: original_eth_address }
       response_body = JSON.parse(response.body)
       expect(response.status).to eq(200)
       expect(response_body["name"]).to eq(create_params[:developer_record][:name])
@@ -49,7 +50,7 @@ RSpec.describe V1::DeveloperRecordsController, type: :controller do
 
     it 'responds with new hashed_identifier on update' do 
       update_params = {
-                        "hashed_identifier": original_hashed_identifier,
+                        "eth_address": original_eth_address,
                         "developer_record": {
                           "name": "New Name",
                         }
