@@ -1,12 +1,19 @@
 module V1
   class DevelopersController < ApplicationController
 
+    before_action :authenticate
+
     def create
-      @developer = Developer.find_by(eth_address: developer_params[:eth_address])
-      if @developer.present?
-        @developer.update!(developer_params)
+      @authed_developer = Developer.find_by(eth_address: @eth_address_access)
+      if @authed_developer.owner
+        @developer = Developer.find_by(eth_address: developer_params[:eth_address])
+        if @developer.present?
+          @developer.update!(developer_params)
+        else
+          @developer = Developer.create!(developer_params)
+        end
       else
-        @developer = Developer.create(developer_params)
+        return render status: 401, json: { success: false, message: 'Only owners can create developers' }
       end
 
       render status: 200, json: {
