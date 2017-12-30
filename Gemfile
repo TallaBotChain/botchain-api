@@ -18,6 +18,8 @@ gem 'ethereum.rb', github: 'EthWorks/ethereum.rb'
 gem 'eth'
 gem 'jwt'
 gem 'andand'
+gem 'figaro'
+gem 'rest-client'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
