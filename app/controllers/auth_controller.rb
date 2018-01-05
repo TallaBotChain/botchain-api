@@ -4,7 +4,7 @@ class AuthController < ApplicationController
     # TODO add production ECDSA_SERVICE_URL to application.yml
     @response = JSON.parse(RestClient::Request.execute(
                             :method => :get,
-                            :url => ENV['ECDSA_SERVICE_URL'],
+                            :url => 'http://' + ENV['SIGVAL_SVC_HOST'],
                             :headers => { 
                               :content_type => :json,
                               :accept => :json

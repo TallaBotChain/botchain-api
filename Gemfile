@@ -26,7 +26,6 @@ gem 'rest-client'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
-gem 'devise_token_auth'
 gem 'health_check'
 
 group :development, :test do
