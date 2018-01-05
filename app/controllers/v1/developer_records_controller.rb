@@ -17,10 +17,16 @@ module V1
       @developer = Developer.find_by(eth_address: @eth_address_access)
       @developer_record = @developer.andand.developer_record
       if @developer_record.present?
+        # Call addDeveloper on BotChain contract 
         @developer_record.update!(developer_record_params)
+        abi = [] # Expose ABI via S3 
+        client = Ethereum::IpcClient.new("~/.parity/mycustom.ipc", false) # Replace with real ipc file
+        contract = Ethereum::Contract.create(name: "BotChain", address: ENV['BOTCHAIN_CONTRACT_ADDRESS'], abi: abi)
+        transaction = contract.transact.update_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
         render status: 200, json: {
                                     success: true,
                                     hashed_identifier: @developer_record.hashed_identifier,
+                                    transaction_address: transaction.address
                                     eth_address: @developer_record.eth_address
                                   }
       else
@@ -34,9 +40,15 @@ module V1
     def create
       @developer_record = DeveloperRecord.create!(developer_record_params)
       @developer = @developer_record.developers.create!(eth_address: developer_record_params[:eth_address], owner: true)
+      # Call addDeveloper on BotChain contract 
+      abi = [] # Expose ABI via S3 
+      client = Ethereum::IpcClient.new("~/.parity/mycustom.ipc", false) # Replace with real ipc file
+      contract = Ethereum::Contract.create(name: "BotChain", address: ENV['BOTCHAIN_CONTRACT_ADDRESS'], abi: abi)
+      transaction = contract.transact.add_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
       render status: 200, json: {
                                   success: true,
                                   hashed_identifier: @developer_record.hashed_identifier,
+                                  transaction_address: transaction.address,
                                   eth_address: @developer_record.eth_address
                                 }
     end
