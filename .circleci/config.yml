@@ -34,5 +34,6 @@ jobs:
                   -c $NAME_PREFIX$ECS_CLUSTER \
                   -d $ENV-deployer \
                   -v ${CIRCLE_SHA1::7} \
+                  -p \
                   $NAME_PREFIX$SERVICE_NAME
             fi
