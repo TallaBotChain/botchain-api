@@ -55,7 +55,6 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     andand (1.3.3)
     arel (8.0.0)
-    bcrypt (3.1.11)
     builder (3.2.3)
     byebug (9.1.0)
     case_transform (0.2)
@@ -63,15 +62,6 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
-    devise (4.3.0)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.2)
-      responders
-      warden (~> 1.2.3)
-    devise_token_auth (0.1.42)
-      devise (> 3.5.2, <= 4.3)
-      rails (< 6)
     diff-lcs (1.3)
     digest-sha3 (1.1.0)
     erubi (1.7.0)
@@ -126,7 +116,6 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
-    orm_adapter (0.5.0)
     pg (0.21.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -166,9 +155,6 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    responders (2.4.0)
-      actionpack (>= 4.2.0, < 5.3)
-      railties (>= 4.2.0, < 5.3)
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
@@ -211,8 +197,6 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
-    warden (1.2.7)
-      rack (>= 1.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -224,7 +208,6 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.7)
   andand
   byebug
-  devise_token_auth
   eth
   ethereum.rb!
   factory_bot_rails
@@ -246,4 +229,4 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

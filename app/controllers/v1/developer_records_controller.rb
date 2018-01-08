@@ -26,7 +26,7 @@ module V1
         render status: 200, json: {
                                     success: true,
                                     hashed_identifier: @developer_record.hashed_identifier,
-                                    transaction_address: transaction.address
+                                    transaction_address: transaction.address,
                                     eth_address: @developer_record.eth_address
                                   }
       else
