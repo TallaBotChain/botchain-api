@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-
-  get "/access_token" => "auth#access_token", as: :access_token
   
   namespace :v1 do 
+    get "/access_token" => "auth#access_token", as: :access_token
 
     resources :developer_records, only: [:create]
     resource :developer_records, only: [:show, :update] 

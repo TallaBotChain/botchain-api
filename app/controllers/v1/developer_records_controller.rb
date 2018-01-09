@@ -19,9 +19,10 @@ module V1
       if @developer_record.present?
         # Call addDeveloper on BotChain contract 
         @developer_record.update!(developer_record_params)
-        abi = [] # Expose ABI via S3 
-        client = Ethereum::IpcClient.new("~/.parity/mycustom.ipc", false) # Replace with real ipc file
-        contract = Ethereum::Contract.create(name: "BotChain", address: ENV['BOTCHAIN_CONTRACT_ADDRESS'], abi: abi)
+        contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotChain']
+        abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi']
+        client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
+        contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
         transaction = contract.transact.update_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
         render status: 200, json: {
                                     success: true,
@@ -41,9 +42,10 @@ module V1
       @developer_record = DeveloperRecord.create!(developer_record_params)
       @developer = @developer_record.developers.create!(eth_address: developer_record_params[:eth_address], owner: true)
       # Call addDeveloper on BotChain contract 
-      abi = [] # Expose ABI via S3 
-      client = Ethereum::IpcClient.new("~/.parity/mycustom.ipc", false) # Replace with real ipc file
-      contract = Ethereum::Contract.create(name: "BotChain", address: ENV['BOTCHAIN_CONTRACT_ADDRESS'], abi: abi)
+      contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotChain']
+      abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi']
+      client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
+      contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
       transaction = contract.transact.add_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
       render status: 200, json: {
                                   success: true,
