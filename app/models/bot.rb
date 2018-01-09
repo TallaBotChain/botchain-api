@@ -1,5 +1,6 @@
 class Bot < ApplicationRecord
   belongs_to :organization
+  has_many :bot_transactions, foreign_key: 'eth_address', primary_key: 'eth_address'
 
   before_save :save_hashed_identifier
 
@@ -17,3 +18,5 @@ class Bot < ApplicationRecord
     Digest::SHA256.hexdigest(new_attributes.to_json)
   end
 end
+
+class BotTransaction < EthereumTransaction; end

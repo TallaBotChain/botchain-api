@@ -36,6 +36,7 @@ module V1
         @bot = Bot.new(bot_params)
         @bot.organization = @organization
         @bot.save!
+        @bot.bot_transactions.create(tx_id: params[:tx_id])
         render status: 200, json: {
                                     success: true,
                                     hashed_identifier: @bot.hashed_identifier,
