@@ -1,6 +1,8 @@
 class DeveloperRecord < ApplicationRecord
   has_many :bots
   has_many :developers
+  has_many :developer_record_transactions, foreign_key: 'eth_address', primary_key: 'eth_address'
+
 
   before_save :save_hashed_identifier
 
@@ -18,3 +20,5 @@ class DeveloperRecord < ApplicationRecord
     Digest::SHA256.hexdigest(new_attributes.to_json)
   end
 end
+
+class DeveloperRecordTransaction < EthereumTransaction; end
