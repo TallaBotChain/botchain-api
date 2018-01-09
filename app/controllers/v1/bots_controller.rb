@@ -1,5 +1,11 @@
 module V1
   class BotsController < ApplicationController
+
+    def index
+      @bots = Bot.where(eth_address: params[:eth_address])
+      render status: 200, json: @bots.to_json
+    end
+
     def show
       @bot = Bot.find_by(hashed_identifier: params[:hashed_identifier])
       if @bot.present?
@@ -46,6 +52,7 @@ module V1
                                     success: false,
                                     message: 'Unidentified organization'
                                   }
+      end
     end
 
     def transfer
