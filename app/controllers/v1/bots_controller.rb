@@ -41,7 +41,7 @@ module V1
 
     private
       def bot_params
-        params.require(:bot).permit(:name, :description, tags: [], :current_version, :eth_address, :hashed_identifier)
+        params.require(:bot).permit(:name, :description, :tags, :current_version, :eth_address, :hashed_identifier)
       end
   end
 end
