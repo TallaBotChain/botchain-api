@@ -13,7 +13,7 @@ module V1
 
     def update
       @developer = Developer.find_by(eth_address: @eth_address_access)
-      @bot = Bot.find_by(hashed_identifier: params[:hashed_identifier])
+      @bot = @developer.bots.find_by(hashed_identifier: params[:hashed_identifier])
       if @bot.present?
         @bot.update!(bot_params)
         render status: 200, json: {
