@@ -1,7 +1,7 @@
 module V1
   class DeveloperRecordsController < ApplicationController
 
-    before_action :authenticate, except: [:show]
+    before_action :authenticate, except: [:show, :eth_transaction]
 
     def show
       @developer = Developer.find_by(eth_address:  params[:eth_address])
@@ -24,6 +24,8 @@ module V1
         client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
         contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
         transaction = contract.transact.update_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
+        @developer_record.ethereum_transactions.create(hash: transaction.address, action_name: 'updateDeveloper')
+
         render status: 200, json: {
                                     success: true,
                                     hashed_identifier: @developer_record.hashed_identifier,
@@ -47,12 +49,33 @@ module V1
       client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
       contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
       transaction = contract.transact.add_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
+      @developer_record.ethereum_transactions.create(hash: transaction.address, action_name: 'addDeveloper')
+
       render status: 200, json: {
                                   success: true,
                                   hashed_identifier: @developer_record.hashed_identifier,
                                   transaction_address: transaction.address,
                                   eth_address: @developer_record.eth_address
                                 }
+    end
+
+    def eth_transaction
+      @developer = Developer.find_by(eth_address: params[:eth_address])
+      @developer_record = @developer.andand.developer_record
+      if @developer_record.present?
+        @ethereum_transaction = @developer_record.ethereum_transactions.where(action_name: params[:action_name]).order(created_at: :desc).first
+        if @ethereum_transaction.present?
+          render status: 200, json: {
+                                      success: true,
+                                      transaction_address: @ethereum_transaction.hash,
+                                      created_at: @ethereum_transaction.created_at
+                                    }
+        else
+          render status: 404, json: { success: false, message: "Transaction not found" }
+        end
+      else
+        render status: 404, json: { success: false, message: "DeveloperRecord not found" }
+      end
     end
 
     private

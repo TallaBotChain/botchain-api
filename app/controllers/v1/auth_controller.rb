@@ -2,7 +2,6 @@ module V1
   class AuthController < ApplicationController
 
     def access_token
-      # TODO add production ECDSA_SERVICE_URL to application.yml
       @response = JSON.parse(RestClient::Request.execute(
                               :method => :get,
                               :url => "http://#{ENV['SIGVAL_SVC_HOST']}/signatures",
