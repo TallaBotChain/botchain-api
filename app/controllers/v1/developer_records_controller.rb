@@ -24,7 +24,7 @@ module V1
         client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
         contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
         transaction = contract.transact.update_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
-        @developer_record.ethereum_transactions.create(hash: transaction.address, action_name: 'updateDeveloper')
+        @developer_record.ethereum_transactions.create(tx_hash: transaction.address, action_name: 'updateDeveloper')
 
         render status: 200, json: {
                                     success: true,
@@ -49,7 +49,7 @@ module V1
       client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
       contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
       transaction = contract.transact.add_developer(developer_record_params[:eth_address], @developer_record.generate_hashed_identifier)
-      @developer_record.ethereum_transactions.create(hash: transaction.address, action_name: 'addDeveloper')
+      @developer_record.ethereum_transactions.create(tx_hash: transaction.address, action_name: 'addDeveloper')
 
       render status: 200, json: {
                                   success: true,
@@ -67,7 +67,7 @@ module V1
         if @ethereum_transaction.present?
           render status: 200, json: {
                                       success: true,
-                                      transaction_address: @ethereum_transaction.hash,
+                                      transaction_address: @ethereum_transaction.tx_hash,
                                       created_at: @ethereum_transaction.created_at
                                     }
         else

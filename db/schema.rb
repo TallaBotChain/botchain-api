@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112000957) do
+ActiveRecord::Schema.define(version: 20180112160538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20180112000957) do
   end
 
   create_table "ethereum_transactions", force: :cascade do |t|
-    t.text "hash"
+    t.text "tx_hash"
     t.integer "ownerable_id"
     t.string "ownerable_type"
     t.string "action_name"
