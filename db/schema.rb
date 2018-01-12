@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171219061809) do
+ActiveRecord::Schema.define(version: 20180112000957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bots", force: :cascade do |t|
-    t.bigint "organization_id"
+    t.bigint "developer_id"
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171219061809) do
     t.string "current_version"
     t.text "eth_address"
     t.text "hashed_identifier"
-    t.index ["organization_id"], name: "index_bots_on_organization_id"
+    t.index ["developer_id"], name: "index_bots_on_developer_id"
   end
 
   create_table "developer_records", force: :cascade do |t|
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20171219061809) do
     t.bigint "developer_record_id"
     t.text "eth_address"
     t.boolean "owner", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ethereum_transactions", force: :cascade do |t|
+    t.text "hash"
+    t.integer "ownerable_id"
+    t.string "ownerable_type"
+    t.string "action_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

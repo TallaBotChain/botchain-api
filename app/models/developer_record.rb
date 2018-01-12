@@ -1,6 +1,6 @@
 class DeveloperRecord < ApplicationRecord
-  has_many :bots
   has_many :developers
+  has_many :ethereum_transactions, as: :ownerable, dependent: :destroy
 
   before_save :save_hashed_identifier
 
