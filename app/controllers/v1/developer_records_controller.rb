@@ -9,7 +9,7 @@ module V1
       if @developer_record.present?
         render json: @developer_record
       else
-        render status: 404, json: { message: "DeveloperRecord not found" }
+        render status: 404, json: { message: "Developer Record not found" }
       end
     end
 
@@ -35,7 +35,7 @@ module V1
       else
         render status: 404, json: {
                                     success: false,
-                                    message: "DeveloperRecord not found."
+                                    message: "Developer Record not found."
                                   }
       end
     end
@@ -74,7 +74,7 @@ module V1
           render status: 404, json: { success: false, message: "Transaction not found" }
         end
       else
-        render status: 404, json: { success: false, message: "DeveloperRecord not found" }
+        render status: 404, json: { success: false, message: "Developer Record not found" }
       end
     end
 
