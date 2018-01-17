@@ -16,6 +16,7 @@ module V1
       @bot = @developer.bots.find_by(hashed_identifier: params[:hashed_identifier])
       if @bot.present?
         @bot.update!(bot_params)
+        @ethereum_transaction = @bot.ethereum_transactions.create(tx_hash: params.require(:tx_hash).permit, action_name: 'updateBot')
         render status: 200, json: {
                                     success: true,
                                     hashed_identifier: @bot.hashed_identifier
@@ -33,15 +34,17 @@ module V1
       @bot = Bot.new(bot_params)
       @bot.developer = @developer
       @bot.save!
+      @ethereum_transaction = @bot.ethereum_transactions.create(tx_hash: params.require(:tx_hash), action_name: 'createBot')
       render status: 200, json: {
                                   success: true,
-                                  hashed_identifier: @bot.hashed_identifier
+                                  hashed_identifier: @bot.hashed_identifier,
+                                  transaction_hash: @ethereum_transaction.tx_hash
                                 }
     end
 
     private
       def bot_params
-        params.require(:bot).permit(:name, :description, :tags, :current_version, :eth_address, :hashed_identifier)
+        params.require(:bot).permit(:name, :description, :current_version, :eth_address, :hashed_identifier, :tags => [])
       end
   end
 end
