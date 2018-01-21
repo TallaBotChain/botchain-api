@@ -20,6 +20,7 @@ gem 'jwt'
 gem 'andand'
 gem 'figaro'
 gem 'rest-client'
+gem 'textacular', '~> 5.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

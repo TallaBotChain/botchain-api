@@ -11,6 +11,15 @@ module V1
       end
     end
 
+    def search
+      @bots = Bot.basic_search(params[:query])
+      if @bots.present?
+        render json: @bots
+      else
+        render status: 404, json: { message: "No Bots matched search query" }
+      end
+    end
+
     def update
       @developer = Developer.find_by(eth_address: @eth_address_access)
       @bot = @developer.bots.find_by(hashed_identifier: params[:hashed_identifier])

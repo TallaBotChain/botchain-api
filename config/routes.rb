@@ -8,7 +8,11 @@ Rails.application.routes.draw do
       get :eth_transaction
     end 
 
-    resources :bots, only: [:create]
+    resources :bots, only: [:create] do 
+      collection do 
+        get :search
+      end
+    end
     resource :bots, only: [:show, :update]
 
     resources :developers, only: [:create]
