@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :bots, only: [:create] do 
       collection do 
         get :search
+        get :identity_verification
       end
     end
     resource :bots, only: [:show, :update]

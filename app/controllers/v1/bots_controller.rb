@@ -1,6 +1,6 @@
 module V1
   class BotsController < ApplicationController
-    before_action :authenticate, except: [:show]
+    before_action :authenticate, except: [:show, :identity_verification]
 
     def show
       @developer = Developer.find_by(eth_address: params[:eth_address])
@@ -49,6 +49,29 @@ module V1
                                   hashed_identifier: @bot.hashed_identifier,
                                   transaction_hash: @ethereum_transaction.tx_hash
                                 }
+    end
+
+    def identity_verification
+      @response = JSON.parse(RestClient::Request.execute(
+                              :method => :get,
+                              :url => "http://#{ENV['SIGVAL_SVC_HOST']}/signatures",
+                              :headers => { 
+                                :content_type => :json,
+                                :accept => :json
+                              },
+                              :payload => params.to_json
+                            ))
+
+      if @response["sender"].present?
+        @bot = Bot.find_by(eth_address: @response["sender"])
+        if @bot.present?
+          render json: @bot
+        else
+          render status: 404, json: { success: false, message: "Bot with Ethereum Address #{@response["sender"]} not found" }
+        end
+      else
+        render status: 400, json: { success: false, message: "Signature verification failed"}
+      end
     end
 
     private
