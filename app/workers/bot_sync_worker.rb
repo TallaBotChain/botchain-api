@@ -11,7 +11,8 @@ class BotSyncWorker
     # Fetch and sync all Bots
     bot_count = contract.call.get_bot_count
     0..bot_count do |index|
-      bot = contract.call.get_bot(index)
+      bot_url = contract.call.get_bot_url(index)
+      bot = JSON.parse(RestClient.get(bot_url))
       existing_bot = Bot.find_by(eth_address: bot['eth_address'])
       if existing_bot.present?
         existing_bot.update(bot)
