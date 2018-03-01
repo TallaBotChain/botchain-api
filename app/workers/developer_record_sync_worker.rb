@@ -11,7 +11,8 @@ class DeveloperRecordSyncWorker
     # Fetch and sync all DeveloperRecords
     developer_count = contract.call.get_developer_count
     0..developer_count do |index|
-      developer_record = contract.call.get_developer(index)
+      developer_record_url = contract.call.get_developer_url(index)
+      developer_record = JSON.parse(RestClient.get(developer_record_url))
       existing_developer_record = DeveloperRecord.find_by(eth_address: developer_record['eth_address'])
       if existing_developer_record.present?
         existing_developer_record.update(developer_record)
