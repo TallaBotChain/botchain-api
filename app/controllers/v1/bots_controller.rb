@@ -12,6 +12,19 @@ module V1
     end
 
     def search
+      client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
+      payment_tx = client.eth_get_transaction_by_hash(params[:botcoin_tx_hash])
+      block_hash = payment_tx['result'].andand['blockHash']
+      if block_hash.present?
+        block = client.eth_get_block_by_hash(payment_tx['result']['blockHash'], false)
+        block_unix_timestamp = block['result']['timestamp'].to_i(16)
+        if block_unix_timestamp < (DateTime.now - 10.minutes).utc.to_i 
+          return render status: 401, json: { success: false, message: "Transaction has expired" }
+        end
+      else
+        return render status: 401, json: { success: false, message: 'Unconfirmed Transaction' }
+      end
+
       @bots = Bot.basic_search(params[:query])
       if @bots.present?
         render json: @bots
