@@ -15,6 +15,7 @@ module V1
       client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
       payment_tx = client.eth_get_transaction_by_hash(params[:botcoin_tx_hash])
       block_hash = payment_tx['result'].andand['blockHash']
+      
       if block_hash.present?
         block = client.eth_get_block_by_hash(payment_tx['result']['blockHash'], false)
         block_unix_timestamp = block['result']['timestamp'].to_i(16)
