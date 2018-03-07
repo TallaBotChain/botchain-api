@@ -23,6 +23,7 @@ gem 'rest-client'
 gem 'textacular', '~> 5.0'
 gem 'sidekiq'
 gem 'whenever', require: false
+gem 'redis'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
