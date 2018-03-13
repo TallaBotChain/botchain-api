@@ -23,33 +23,33 @@ module V1
           return render status: 401, json: { success: false, message: "Transaction has expired" }
         end
 
-        # encoded_input = payment_tx['result']['input']
-        # if encoded_input
-        #   params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi'], encoded_input: encoded_input }
-        #   response = JSON.parse(RestClient::Request.execute(
-        #                       :method => :get,
-        #                       :url => "http://#{ENV['SIGVAL_SVC_HOST']}/decode",
-        #                       :headers => { 
-        #                         :content_type => :json,
-        #                         :accept => :json
-        #                       },
-        #                       :payload => params.to_json
-        #                     ))
+        encoded_input = payment_tx['result']['input']
+        if encoded_input
+          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi'], encoded_input: encoded_input }
+          response = JSON.parse(RestClient::Request.execute(
+                              :method => :get,
+                              :url => "http://#{ENV['SIGVAL_SVC_HOST']}/decode",
+                              :headers => { 
+                                :content_type => :json,
+                                :accept => :json
+                              },
+                              :payload => params.to_json
+                            ))
 
-        #   if response['name'] == "transfer"
-        #     if response["params"].first["value"] != ENV["RECIEVE_ETH_ADDRESS"]
-        #       return render status: 401, json: { success: false, message: "Please send BOTC to #{ENV["RECIEVE_ETH_ADDRESS"]}" }
-        #     end
+          if response['name'] == "transfer"
+            if response["params"].first["value"] != ENV["RECIEVE_ETH_ADDRESS"]
+              return render status: 401, json: { success: false, message: "Please send BOTC to #{ENV["RECIEVE_ETH_ADDRESS"]}" }
+            end
 
-        #     if response["params"].last["value"] != ENV["SEARCH_BOTCOIN_PRICE_WEI"]
-        #       return render status: 401, json: { success: false, message: "Incorrect BOTC amount" }
-        #     end
-        #   else
-        #     return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
-        #   end
-        # else
-        #   return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
-        # end
+            if response["params"].last["value"] != ENV["SEARCH_BOTCOIN_PRICE_WEI"]
+              return render status: 401, json: { success: false, message: "Incorrect BOTC amount" }
+            end
+          else
+            return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
+          end
+        else
+          return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
+        end
       else
         return render status: 401, json: { success: false, message: 'Unconfirmed Transaction' }
       end
@@ -94,6 +94,48 @@ module V1
     end
 
     def identity_verification
+      client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
+      payment_tx = client.eth_get_transaction_by_hash(params[:botcoin_tx_hash])
+      block_hash = payment_tx['result'].andand['blockHash']
+
+      if block_hash.present?
+        block = client.eth_get_block_by_hash(payment_tx['result']['blockHash'], false)
+        block_unix_timestamp = block['result']['timestamp'].to_i(16)
+        if block_unix_timestamp < (DateTime.now - 10.minutes).utc.to_i 
+          return render status: 401, json: { success: false, message: "Transaction has expired" }
+        end
+
+        encoded_input = payment_tx['result']['input']
+        if encoded_input
+          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi'], encoded_input: encoded_input }
+          response = JSON.parse(RestClient::Request.execute(
+                              :method => :get,
+                              :url => "http://#{ENV['SIGVAL_SVC_HOST']}/decode",
+                              :headers => { 
+                                :content_type => :json,
+                                :accept => :json
+                              },
+                              :payload => params.to_json
+                            ))
+
+          if response['name'] == "transfer"
+            if response["params"].first["value"] != ENV["RECIEVE_ETH_ADDRESS"]
+              return render status: 401, json: { success: false, message: "Please send BOTC to #{ENV["RECIEVE_ETH_ADDRESS"]}" }
+            end
+
+            if response["params"].last["value"] != ENV["SEARCH_BOTCOIN_PRICE_WEI"]
+              return render status: 401, json: { success: false, message: "Incorrect BOTC amount" }
+            end
+          else
+            return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
+          end
+        else
+          return render status: 401, json: { success: false, message: "Transaction is not an ERC20 transfer" }
+        end
+      else
+        return render status: 401, json: { success: false, message: 'Unconfirmed Transaction' }
+      end
+      
       @response = JSON.parse(RestClient::Request.execute(
                               :method => :get,
                               :url => "http://#{ENV['SIGVAL_SVC_HOST']}/signatures",
