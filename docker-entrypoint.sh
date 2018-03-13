@@ -32,6 +32,13 @@ function app_init {
 }
 export -f app_init
 
+function redis_init {
+  #bundle exec sidekiq --environment production
+  echo "$(echo '0 1 * * * /bin/bash -l -c 'cd /src/app \&\& bin/rails runner -e production "BotSyncWorker.new.perform"''; crontab -l)" | crontab -
+  echo "$(echo '0 1 * * * /bin/bash -l -c 'cd /src/app \&\& bin/rails runner -e production "DeveloperRecordSyncWorker.new.perform"''; crontab -l)" | crontab -
+}
+export -f redis_init
+
 function db_init {
   echo "Setting up db"
   bundle exec rake db:create db:migrate db:seed
@@ -42,7 +49,7 @@ function db_reset {
   echo "Resetting db"
   bundle exec rake db:reset
 }
-export -f db_init
+export -f db_reset
 
 function db_migrate {
   echo "Migrating db"
@@ -81,6 +88,7 @@ case $action in
     wait_for_services
     app_init
     db_init
+    redis_init
     start_app
   ;;
 
@@ -88,6 +96,7 @@ case $action in
     wait_for_services
     app_init
     db_init
+    redis_init
     start_worker
   ;;
 
@@ -95,7 +104,13 @@ case $action in
     wait_for_services
     app_init
     db_init
+    redis_init
     start_console
+  ;;
+
+  redis_init)
+    wait_for_services
+    redis_init
   ;;
 
   db_init)
@@ -123,6 +138,7 @@ case $action in
     export RAILS_ENV=test RACK_ENV=test
     app_init
     db_init
+    redis_init
     echo "Starting tests"
     bundle exec rspec
   ;;

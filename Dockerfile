@@ -7,6 +7,8 @@ ENV BUNDLE_BIN=${BUNDLE_PATH}/bin
 ENV GEM_HOME=${BUNDLE_PATH}
 ENV PATH="${BUNDLE_BIN}:${PATH}"
 
+ENV SIDEKIQ_HOME=/root/botchain-sidekiq
+
 RUN apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
         build-essential \
@@ -15,6 +17,7 @@ RUN apt-get update -qq && \
         vim \
         less \
         curl \
+	cron \
         && \
     rm -rf /var/lib/apt/lists/*
 
@@ -23,7 +26,5 @@ WORKDIR $APP_DIR
 
 COPY Gemfile Gemfile.lock $APP_DIR/
 RUN bundle install
-
-COPY . $APP_DIR/
 
 ENTRYPOINT ["/srv/app/docker-entrypoint.sh"]
