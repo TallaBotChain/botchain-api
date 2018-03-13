@@ -27,4 +27,7 @@ WORKDIR $APP_DIR
 COPY Gemfile Gemfile.lock $APP_DIR/
 RUN bundle install
 
+RUN echo "$(echo '0 1 * * * /bin/bash -l -c 'cd /src/app \&\& bin/rails runner -e production BotSyncWorker.new.perform''; crontab -l)" | crontab -
+RUN echo "$(echo '0 1 * * * /bin/bash -l -c 'cd /src/app \&\& bin/rails runner -e production DeveloperRecordSyncWorker.new.perform''; crontab -l)" | crontab -
+
 ENTRYPOINT ["/srv/app/docker-entrypoint.sh"]
