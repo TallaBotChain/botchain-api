@@ -42,7 +42,7 @@ function db_reset {
   echo "Resetting db"
   bundle exec rake db:reset
 }
-export -f db_init
+export -f db_reset
 
 function db_migrate {
   echo "Migrating db"
