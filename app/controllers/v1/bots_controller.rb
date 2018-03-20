@@ -1,6 +1,6 @@
 module V1
   class BotsController < ApplicationController
-    before_action :authenticate, except: [:show, :identity_verification]
+    before_action :authenticate, except: [:show, :identity_verification, :search]
 
     def show
       @developer = Developer.find_by(eth_address: params[:eth_address])
@@ -135,7 +135,7 @@ module V1
       else
         return render status: 401, json: { success: false, message: 'Unconfirmed Transaction' }
       end
-      
+
       @response = JSON.parse(RestClient::Request.execute(
                               :method => :get,
                               :url => "http://#{ENV['SIGVAL_SVC_HOST']}/signatures",
