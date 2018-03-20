@@ -9,7 +9,7 @@ class BotSyncWorker
     contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
 
     # Fetch and sync all Bots
-    bot_count = contract.call.get_bot_count
+    bot_count = contract.call.total_supply
     0..bot_count do |index|
       bot_url = contract.call.get_bot_url(index)
       bot = JSON.parse(RestClient.get(bot_url))

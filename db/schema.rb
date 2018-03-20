@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112212444) do
+ActiveRecord::Schema.define(version: 20180320170602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20180112212444) do
     t.string "current_version"
     t.text "eth_address"
     t.text "hashed_identifier"
+    t.text "metadata_url"
     t.index ["developer_id"], name: "index_bots_on_developer_id"
   end
 
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180112212444) do
     t.boolean "approved", default: false
     t.text "eth_address"
     t.text "hashed_identifier"
+    t.text "metadata_url"
   end
 
   create_table "developers", force: :cascade do |t|

@@ -123,7 +123,7 @@ module V1
               return render status: 401, json: { success: false, message: "Please send BOTC to #{ENV["RECIEVE_ETH_ADDRESS"]}" }
             end
 
-            if response["params"].last["value"] != ENV["SEARCH_BOTCOIN_PRICE_WEI"]
+            if response["params"].last["value"] != ENV["ID_BOTCOIN_PRICE_WEI"]
               return render status: 401, json: { success: false, message: "Incorrect BOTC amount" }
             end
           else
@@ -149,7 +149,7 @@ module V1
       if @response["sender"].present?
         @bot = Bot.find_by(eth_address: @response["sender"])
         if @bot.present?
-          render json: @bot
+          render json: { success: true, bot: @bot.metadata_url, developer: @bot.developer.metadata_url }
         else
           render status: 404, json: { success: false, message: "Bot with Ethereum Address #{@response["sender"]} not found" }
         end
