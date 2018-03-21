@@ -3,21 +3,23 @@ class BotSyncWorker
 
   def perform
     # Setup
-    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotChain']
-    abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi']
+    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotProductRegistryDelegate']
+    abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotProductRegistryDelegate.json'))['abi']
     client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
-    contract = Ethereum::Contract.create(name: "BotChain", address: contract_address, abi: abi, client: client)
+    contract = Ethereum::Contract.create(name: "BotProductRegistryDelegate", address: contract_address, abi: abi, client: client)
 
     # Fetch and sync all Bots
     bot_count = contract.call.total_supply
     0..bot_count do |index|
-      bot_url = contract.call.get_bot_url(index)
+      bot_url = contract.call.bot_entry_url(index)
       bot = JSON.parse(RestClient.get(bot_url))
       existing_bot = Bot.find_by(eth_address: bot['eth_address'])
       if existing_bot.present?
         existing_bot.update(bot)
+        existing_bot.update(metadata_url: bot_url)
       else
-        Bot.create(bot)
+        new_bot = Bot.create(bot)
+        new_bot.update(metadata_url: bot_url)
       end
     end
   end

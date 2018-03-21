@@ -25,7 +25,7 @@ module V1
 
         encoded_input = payment_tx['result']['input']
         if encoded_input
-          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi'], encoded_input: encoded_input }
+          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotCoin.json'))['abi'], encoded_input: encoded_input }
           response = JSON.parse(RestClient::Request.execute(
                               :method => :get,
                               :url => "http://#{ENV['SIGVAL_SVC_HOST']}/decode",
@@ -107,7 +107,7 @@ module V1
 
         encoded_input = payment_tx['result']['input']
         if encoded_input
-          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotChain.json'))['abi'], encoded_input: encoded_input }
+          params = { abi: JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotCoin.json'))['abi'], encoded_input: encoded_input }
           response = JSON.parse(RestClient::Request.execute(
                               :method => :get,
                               :url => "http://#{ENV['SIGVAL_SVC_HOST']}/decode",
