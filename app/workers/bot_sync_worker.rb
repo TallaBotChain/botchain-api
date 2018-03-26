@@ -3,10 +3,10 @@ class BotSyncWorker
 
   def perform
     # Setup
-    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotProductRegistryDelegate']
+    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['BotProductRegistry']
     abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/BotProductRegistryDelegate.json'))['abi']
     client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
-    contract = Ethereum::Contract.create(name: "BotProductRegistryDelegate", address: contract_address, abi: abi, client: client)
+    contract = Ethereum::Contract.create(name: "BotProductRegistry", address: contract_address, abi: abi, client: client)
 
     # Fetch and sync all Bots
     bot_count = contract.call.total_supply

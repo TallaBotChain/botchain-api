@@ -3,10 +3,10 @@ class DeveloperRecordSyncWorker
 
   def perform
     # Setup
-    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['DeveloperRegistryDelegate']
+    contract_address = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts.json'))['DeveloperRegistry']
     abi = JSON.parse(RestClient.get('https://s3.amazonaws.com/talla-botchain-dev-abi/contracts/DeveloperRegistryDelegate.json'))['abi']
     client = Ethereum::HttpClient.new("http://#{ENV['RPC_HOST']}:#{ENV['RPC_PORT']}")
-    contract = Ethereum::Contract.create(name: "DeveloperRegistryDelegate", address: contract_address, abi: abi, client: client)
+    contract = Ethereum::Contract.create(name: "DeveloperRegistry", address: contract_address, abi: abi, client: client)
 
     # Fetch and sync all DeveloperRecords
     developer_count = contract.call.total_supply
