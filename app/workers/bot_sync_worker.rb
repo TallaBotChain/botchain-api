@@ -10,7 +10,7 @@ class BotSyncWorker
 
     # Fetch and sync all Bots
     bot_count = contract.call.total_supply
-    1..bot_count do |index|
+    (1..bot_count).each do |index|
       bot_url = contract.call.bot_entry_url(index)
       bot_developer_eth_address = contract.call.get_bot_entry(index).andand.first
       bot_metadata = JSON.parse(RestClient.get(bot_url))
