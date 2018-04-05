@@ -15,7 +15,7 @@ class BotSyncWorker
       next if bot_url.empty?
       bot_developer_eth_address = "0x#{contract.call.get_bot_entry(index).andand.first}"
       bot_metadata = JSON.parse(RestClient.get(bot_url))
-      existing_bot = Bot.find_by(eth_address: bot_metadata['eth_address'])
+      existing_bot = Bot.find_by(eth_address: contract.call.get_bot_entry(index).andand[1])
       existing_bot_developer = Developer.find_by(eth_address: bot_developer_eth_address)
       if existing_bot.present?
         existing_bot.update(bot_metadata)
