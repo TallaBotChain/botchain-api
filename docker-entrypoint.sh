@@ -2,7 +2,6 @@
 
 # fail fast
 set -e
-
 export RACK_ENV=$APP_ENV
 export RAILS_ENV=$APP_ENV
 
