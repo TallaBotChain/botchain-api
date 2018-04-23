@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      - SERVICE_NAME: "botchain-api"
+      - SERVICE_NAME: "api"
       - ENV: "dev"
       - AWS_ACCOUNT: "500651484941"
       - AWS_DEFAULT_REGION: "us-east-1"
