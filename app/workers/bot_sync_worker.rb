@@ -24,11 +24,11 @@ class BotSyncWorker
       existing_bot_developer = Developer.find_or_create_by(eth_address: bot_developer_eth_address)
       if existing_bot.present?
         existing_bot.update(bot_metadata)
-        existing_bot.update(developer: existing_bot_developer) 
+        existing_bot.update(developer_id: existing_bot_developer.id) 
         existing_bot.update(metadata_url: bot_url)
       else
         new_bot = Bot.create!(bot_metadata)
-        new_bot.update(developer: existing_bot_developer)
+        new_bot.update(developer_id: existing_bot_developer.id)
         new_bot.update(metadata_url: bot_url)
       end
     end
