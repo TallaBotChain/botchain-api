@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  root "application#welcome"
   
   namespace :v1 do 
     get "/access_token" => "auth#access_token", as: :access_token

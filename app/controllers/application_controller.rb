@@ -1,5 +1,9 @@
 class ApplicationController < ActionController::API
 
+  def welcome
+    render status: 200, nothing: true
+  end
+
   private
     def authenticate
       if params[:access_token].present?
