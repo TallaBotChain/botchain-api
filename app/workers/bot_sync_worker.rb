@@ -16,7 +16,7 @@ class BotSyncWorker
       bot_developer_eth_address = "0x#{contract.call.get_bot_entry(index).andand[0]}"
       bot_eth_address = "0x#{contract.call.get_bot_entry(index).andand[1]}"
       begin
-        bot_metadata = JSON.parse(RestClient.get(bot_url))
+        bot_metadata = JSON.parse(RestClient.get(bot_url).delete(160.chr+194.chr))
       rescue
         next
       end
